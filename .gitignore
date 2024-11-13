@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+dist/
+
+# IDEs and Editors
+.vscode/
+*.log
+*.lock
+
+# Uni-app
+uni-app/dist/
+uni-app/node_modules/
+uni-app/.output/
+uni-app/.nuxt/
+uni-app/.cache/
+uni-app/.env
+uni-app/.env.local
+uni-app/.env.*.local
+
+# macOS
+.DS_Store

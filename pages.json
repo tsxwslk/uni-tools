@@ -1,0 +1,56 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": { // 属性与下方全局属性的配置一致，在页面样式配置会覆盖全局的配置
+				"navigationBarTitleText": "小工具"
+			}
+		},
+		{
+			"path" : "pages/list/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的清单"
+			}
+		},
+		{
+			"path" : "pages/user/user",
+			"style" : 
+			{
+				"navigationBarTitleText" : "个人中心"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black", // 导航栏标题颜色，仅支持black和white
+		"navigationBarTitleText": "uni-app", // 导航栏标题文字内容，权重低于上面页面配置的权重
+		"navigationBarBackgroundColor": "#fff", // 导航栏背景颜色 
+		"enablePullDownRefresh": true, // 是否开启下拉刷新
+		"backgroundColor": "#878787", // 下拉刷新的背景色
+		"backgroundTextStyle": "dark", // 下拉刷新时三个点的颜色
+		"onReachBottomDistance": 500 // 触底更新的距离，配合页面生命周期的onReachBottom使用
+	},
+	"tabBar": { // 下方导航栏
+		"color": "#878787", // 文字颜色
+		"selectedColor": "#4A4A4A", // 选中文字颜色
+		"backgroundColor": "#E9E4ED", // 底部导航背景颜色
+		"borderStyle": "white", // 边框样式
+		"list": [ // 导航列表，数量最少两个最多五个
+			{
+				"pagePath": "pages/index/index",
+				"text": "工具",
+				"iconPath": "", // 默认情况下icon路径，需设置大小为81px，不支持网络图片
+				"selectedIconPath": "" // 选中情况下icon路径
+			},
+			{
+				"pagePath": "pages/list/list",
+				"text":"清单"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"text":"我的"
+			}
+		]
+	},
+	"uniIdRouter": {}
+}
