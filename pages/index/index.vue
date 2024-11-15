@@ -55,7 +55,7 @@
 				<view class="eat-title">
 					选择困难症开始：
 				</view>
-				<view class="eat-btn" @click="randomHandle">
+				<view class="eat-btn" @click="randomHandle" :class="{isDisable:!randomClick}">
 					随机
 				</view>
 				<view class="eat-confirm">
@@ -66,21 +66,20 @@
 				</view>
 			</view>
 			<view class="clock-area" v-if="currentIndex===2">
+				<view class="container">
+					<view class="dot" @click="handleClock">
+						<text v-if="!padStatus">开始</text>
+						<text v-else>暂停</text>
+					</view>
+					<view class="pulse" v-if="padStatus"></view>
+					<view class="pulse1" v-if="padStatus"></view>
+				</view>
+
 				<view class="time-area">
 					{{ formattedTime }}
+					<uni-icons @click="reset" type="refreshempty" size="20" color="#61398F" style="margin-left:30px"></uni-icons>
 				</view>
-				<view class="time-btn">
-					<view class="btn-item" @click="start">
-						开始
-					</view>
-					<view class="btn-item" @click="stop">
-						暂停
-					</view>
-					<view class="btn-item" @click="reset">
-						重置
-					</view>
-				</view>
-				<view class="show-relax" v-if="hours>1">
+				<view class="show-relax" v-if="hours>=1">
 					<image src="../../static/tea.png" style="width:150px;height: 150px;"></image>
 					<view class="relax-text">
 						已经阅读超过一小时啦，休息休息吧~
@@ -95,7 +94,7 @@
 	import {
 		ref,
 		reactive,
-		computed
+		computed,
 	} from 'vue'
 	import {
 		storeToRefs
@@ -119,13 +118,16 @@
 	const handleChangeSwiper = function(current) {
 		currentIndex.value = current.detail.current
 	}
+	const randomClick=ref(true)
 	const randomHandle = function() {
 		showFood.value = true
+		randomClick.value=false
 		intervalId.value = setInterval(() => {
 			currentText.value = foodList.value[Math.floor(Math.random() * foodList.value.length)];
 		}, 50);
 		setTimeout(() => {
 			clearInterval(intervalId.value);
+			randomClick.value=true
 		}, 1000);
 	}
 
@@ -135,6 +137,15 @@
 	const clock = ref(null)
 	const pad = function(value) {
 		return value.toString().padStart(2, '0');
+	}
+	const padStatus = ref(false)
+	const handleClock = function() {
+		padStatus.value = !padStatus.value
+		if (padStatus.value) {
+			start()
+		} else {
+			stop()
+		}
 	}
 	const start = function() {
 		if (!clock.value) {
@@ -158,6 +169,7 @@
 		}
 	}
 	const reset = function() {
+		padStatus.value=false
 		stop();
 		seconds.value = 0;
 		minutes.value = 0;
@@ -337,9 +349,12 @@
 				line-height: 150px;
 				color: #fff;
 				font-size: 28px;
-				font-weight: 700;
+				font-weight: 700;				
 			}
-
+			.isDisable{
+				pointer-events: none;
+				background: #E9E4ED;
+			}
 			.food-list {
 				padding-top: 20px;
 				width: 250px;
@@ -358,34 +373,17 @@
 		.clock-area {
 			.time-area {
 				width: 100%;
-				height: 180px;
+				height: 60px;
 				font-size: 20px;
 				font-weight: 700;
-				line-height: 180px;
+				line-height: 60px;
 				color: #4A4A4A;
 				text-align: center;
 			}
 
-			.time-btn {
-				display: flex;
-				width: calc(100% - 160px);
-				padding: 20px 80px;
-				justify-content: space-between;
-
-				.btn-item {
-					width: 50px;
-					height: 50px;
-					border-radius: 50%;
-					background: #61398F;
-					text-align: center;
-					line-height: 50px;
-					color: #fff;
-				}
-			}
-
 			.show-relax {
 				width: 100%;
-				margin-top: 30px;
+				margin-top: 10px;
 				text-align: center;
 
 				.relax-text {
@@ -395,6 +393,139 @@
 					font-size: 18px;
 					font-weight: 700;
 				}
+			}
+
+			@keyframes warn {
+				0% {
+					transform: scale(0.1);
+					-webkit-transform: scale(0.1);
+					opacity: 0.0;
+				}
+
+				25% {
+					transform: scale(0.25);
+					-webkit-transform: scale(0.25);
+					opacity: 0.1;
+				}
+
+				50% {
+					transform: scale(0.5);
+					-webkit-transform: scale(0.5);
+					opacity: 0.3;
+				}
+
+				75% {
+					transform: scale(0.6);
+					-webkit-transform: scale(0.6);
+					opacity: 0.5;
+				}
+
+				100% {
+					transform: scale(0.7);
+					-webkit-transform: scale(0.7);
+					opacity: 0.0;
+				}
+			}
+
+			@keyframes warn1 {
+				0% {
+					transform: scale(0.3);
+					-webkit-transform: scale(0.3);
+					opacity: 0.0;
+				}
+
+				25% {
+					transform: scale(0.3);
+					-webkit-transform: scale(0.3);
+					opacity: 0.1;
+				}
+
+				50% {
+					transform: scale(0.3);
+					-webkit-transform: scale(0.3);
+					opacity: 0.3;
+				}
+
+				75% {
+					transform: scale(0.4);
+					-webkit-transform: scale(0.4);
+					opacity: 0.5;
+				}
+
+				100% {
+					transform: scale(0.6);
+					-webkit-transform: scale(0.6);
+					opacity: 0.0;
+				}
+			}
+
+			.container {
+				position: relative;
+				width: 100%;
+				height: 300px;
+			}
+
+			/* 保持大小不变的小圆圈 何问起 */
+			.dot {
+				position: absolute;
+				margin: 0 auto;
+				width: 150px;
+				height: 150px;
+				left: calc((100% - 150px) / 2);
+				top: 80px;
+				-webkit-border-radius: 50%;
+				-moz-border-radius: 50%;
+				background: rgba(97, 57, 143, 0.9);
+				box-shadow: 1px 1px 5px #61398F, 1px 1px 10px #61398F, 1px 1px 15px #61398F;
+				border-radius: 50%;
+				z-index: 2;
+				color: #fff;
+				text-align: center;
+				line-height: 150px;
+				font-size: 20px;
+			}
+
+			/* 产生动画（向外扩散变大）的圆圈  */
+			.pulse {
+				position: absolute;
+				width: 320px;
+				height: 320px;
+				left: calc((100% - 330px)/2);
+				top: -10px;
+				border: 6px solid rgba(97, 57, 143, 0.7);
+				-webkit-border-radius: 50%;
+				-moz-border-radius: 50%;
+				border-radius: 50%;
+				z-index: 1;
+				opacity: 0;
+				-webkit-animation: warn 2s linear;
+				-moz-animation: warn 2s linear;
+				animation: warn 2s linear;
+				-webkit-animation-iteration-count: infinite;
+				-moz-animation-iteration-count: infinite;
+				animation-iteration-count: infinite;
+				box-shadow: 1px 1px 30px rgba(97, 57, 143, 0.8);
+			}
+
+			.pulse1 {
+				position: absolute;
+				width: 320px;
+				height: 320px;
+				left: calc((100% - 330px)/2);
+				top: -10px;
+				border: 6px solid rgba(97, 57, 143, 0.9);
+				-webkit-border-radius: 50%;
+				-moz-border-radius: 50%;
+				border-radius: 50%;
+				z-index: 1;
+				opacity: 0;
+				-webkit-animation: warn1 2s linear;
+				-moz-animation: warn1 2s linear;
+				animation: warn1 2s linear;
+				-webkit-animation-iteration-count: infinite;
+				-moz-animation-iteration-count: infinite;
+				animation-iteration-count: infinite;
+				box-shadow: 1px 1px 30px rgba(97, 57, 143, 0.9);
 			}
 		}
 	}

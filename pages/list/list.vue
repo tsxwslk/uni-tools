@@ -1,10 +1,45 @@
 <template>
-	<view class="list-page">
-		<view class="add-button">
-			<uni-icons type="plus" size="24" color="#1D537F"></uni-icons>
-			<text>添加清单</text>
+	<view class="page">
+		<view class="list-header">
+			<view class="header-btn">
+				<view class="btn-item" :style="{background:item.value===listType?'#61398F':'#8B5FBF'}"
+					v-for="item in headerList" :key="item.value" @click="selectType(item.value)">
+					{{item.label}}
+				</view>
+			</view>
+			<view class="add-btn">
+				<navigator url="/pages/list/editItem/editItem?type=add" hover-class="navigator-hover">
+					<uni-icons type="plus-filled" size="40" color="#8B5FBF"></uni-icons>
+				</navigator>
+			</view>
 		</view>
-		<uni-collapse>
+		<view class="list-content">
+			<view v-for="(item,index) in showList" :key="item.id" class="list-item">
+				<view class="item-icon">
+					<uni-icons type="star" size="28" color="#8B5FBF" v-if="item.status===1"></uni-icons>
+					<uni-icons type="starhalf" size="28" color="#8B5FBF" v-if="item.status===2"></uni-icons>
+					<uni-icons type="star-filled" size="28" color="#8B5FBF" v-if="item.status===3"></uni-icons>
+				</view>
+				<view class="item-content">
+					<view class="content-title">
+						<view class="title-text">
+							{{item.name}}
+						</view>
+						<view class="title-badge">
+							{{dicts.find(it=>it.type==item.type).value}}
+						</view>
+					</view>
+					<view class="content-time">
+						开始时间：{{item.startTime}}
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 		<view class="add-button">
+			<uni-icons type="plus" size="24" color="#61398F"></uni-icons>
+			<text>添加清单</text>
+		</view> -->
+		<!-- 		<uni-collapse>
 			<uni-collapse-item title="待完成">
 				<view v-for="item in preList" :key="item.id" class="list-item">
 					<view class="item-first">
@@ -42,50 +77,148 @@
 					</view>
 				</view>
 			</uni-collapse-item>
-		</uni-collapse>
+		</uni-collapse> -->
 	</view>
 </template>
 
 <script setup>
-	import {ref} from 'vue'
-	import { storeToRefs } from "pinia"
+	import {
+		ref,
+		onMounted
+	} from 'vue'
+	import {
+		storeToRefs
+	} from "pinia"
 	import {
 		useCounterStore
 	} from '@/store/counter.js'
 	const counter = useCounterStore()
-	const {dataList,dicts} = storeToRefs(counter)
-	const preList = dataList.value.filter(item=>item.status===1)
-	const ingList = dataList.value.filter(item=>item.status===2)
-	const edList = dataList.value.filter(item=>item.status===3)
+	const {
+		dataList,
+		dicts
+	} = storeToRefs(counter)
+	const headerList = ref([{
+		value: 0,
+		label: '全部'
+	}, {
+		value: 1,
+		label: '未完成'
+	}, {
+		value: 2,
+		label: '进行中'
+	}, {
+		value: 3,
+		label: '已完成'
+	}, ])
+	const preList = dataList.value.filter(item => item.status === 1)
+	const ingList = dataList.value.filter(item => item.status === 2)
+	const edList = dataList.value.filter(item => item.status === 3)
+	const listType = ref(0)
+	const showList = ref({})
+	const selectType = function(type) {
+		listType.value = type
+		if (type === 0) {
+			showList.value = dataList.value
+		} else {
+			showList.value = JSON.parse(JSON.stringify(dataList.value.filter(item => item.status === type)))
+		}
+	}
+	onMounted(() => {
+		selectType(listType.value)
+	})
 </script>
 
 <style lang="scss" scoped>
-	.list-page {
+	.page {
 		height: 100vh;
 		padding-top: 20rpx;
+		color: #4A4A4A;
 
-		.add-button {
-			color: #ccc;
-			height: 80rpx;
+		.list-header {
 			display: flex;
-			justify-content: center;
-			line-height: 80rpx;
-		}
-		.list-item{
-			margin: 5rpx 50rpx 20rpx;
-			padding:20rpx;
-			background-color: #fff;
-			border-radius: 20rpx;
-			box-shadow: inset -3px -3px 9px rgba(255, 255, 255, .9), inset 3px 4px 9px rgba(222,217,205, .9);;
-			.item-first{
-				margin-bottom: 20rpx;
+			justify-content: space-between;
+			width: 100%;
+			height: 60px;
+
+			.header-btn {
+				width: calc(100% - 120px);
+				padding: 0 20px;
 				display: flex;
-				.item-title{
-					width: 300rpx;
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					margin-right: 50rpx;
+				justify-content: space-between;
+				align-items: center;
+				color: #fff;
+
+				.btn-item {
+					width: 22%;
+					height: 40px;
+					background: #8B5FBF;
+					border-radius: 5px;
+					text-align: center;
+					line-height: 40px;
+					font-size: 14px;
+					font-weight: 700;
+				}
+			}
+
+			.add-btn {
+				width: 40px;
+				margin: 10px 20px;
+			}
+		}
+
+		.list-content {
+			margin: 30px;
+
+			.list-item {
+				height: 60px;
+				margin-top: 12px;
+				display: flex;
+				justify-content: space-between;
+
+				.item-icon {
+					margin-top: 10px;
+				}
+
+				.item-content {
+					width: calc(100% - 30px);
+					height: 60px;
+
+					.content-title {
+						height: 30px;
+						line-height: 30px;
+						font-size: 16px;
+						font-weight: 700;
+						color: #4A4A4A;
+						display: flex;
+						justify-content: space-between;
+
+						.title-text {
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							width: calc(100% - 60px);
+						}
+
+						.title-badge {
+							background: #9A73B5;
+							border-radius: 5px;
+							width: 50px;
+							height: 30px;
+							color: #fff;
+							text-align: center;
+							line-height: 30px;
+							font-size: 12px;
+							margin-top: 10px;
+						}
+					}
+
+					.content-time {
+						height: 30px;
+						line-height: 30px;
+						font-size: 14px;
+						font-weight: 400;
+						color: #878787;
+					}
 				}
 			}
 		}

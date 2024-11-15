@@ -19,6 +19,13 @@
 			{
 				"navigationBarTitleText" : "个人中心"
 			}
+		},
+		{
+			"path" : "pages/list/editItem/editItem",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 	],
 	"globalStyle": {
