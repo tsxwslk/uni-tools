@@ -11,8 +11,8 @@ export const useCounterStore = defineStore('counter', {
 					name: '《阿加莎·克里斯蒂大侦探波洛系列全集》',
 					type: 'book',
 					tags: '悬疑推理',
-					startTime: '2024-08-01',
-					endTime: '',
+					startDate: '2024-08-01',
+					endDate: '',
 					status: 1,
 					remarks: ''
 				},
@@ -21,8 +21,8 @@ export const useCounterStore = defineStore('counter', {
 					name: '《鲁迅全集》',
 					type: 'book',
 					tags: '作者文集',
-					startTime: '2024-08-01',
-					endTime: '',
+					startDate: '2024-08-01',
+					endDate: '',
 					status: 2,
 					remarks: ''
 				},
@@ -31,8 +31,8 @@ export const useCounterStore = defineStore('counter', {
 					name: '广州',
 					type: 'tourism',
 					tags: '',
-					startTime: '2023-11-01',
-					endTime: '2023-11-08',
+					startDate: '2023-11-01',
+					endDate: '2023-11-08',
 					status: 3,
 					remarks: '太好吃了，下次还去'
 				},
@@ -41,8 +41,8 @@ export const useCounterStore = defineStore('counter', {
 					name: '《蝲蛄吟唱的地方》',
 					type: 'book',
 					tags: '悬疑推理',
-					startTime: '2024-06-27',
-					endTime: '',
+					startDate: '2024-06-27',
+					endDate: '',
 					status: 1,
 					remarks: ''
 				},
@@ -51,8 +51,8 @@ export const useCounterStore = defineStore('counter', {
 					name: '《基督山伯爵》',
 					type: 'book',
 					tags: '长篇小说',
-					startTime: '2024-09-27',
-					endTime: '2024-11-08',
+					startDate: '2024-09-27',
+					endDate: '2024-11-08',
 					status: 3,
 					remarks: ''
 				},
@@ -61,8 +61,8 @@ export const useCounterStore = defineStore('counter', {
 					name: '《我的阿勒泰》',
 					type: 'book',
 					tags: '散文',
-					startTime: '2024-11-09',
-					endTime: '',
+					startDate: '2024-11-09',
+					endDate: '',
 					status: 2,
 					remarks: ''
 				},
@@ -94,7 +94,7 @@ export const useCounterStore = defineStore('counter', {
 			],
 			status: [{
 					type: 1,
-					value: '未完成'
+					value: '未开始'
 				},
 				{
 					type: 2,

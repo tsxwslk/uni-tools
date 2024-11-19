@@ -28,56 +28,15 @@
 						<view class="title-badge">
 							{{dicts.find(it=>it.type==item.type).value}}
 						</view>
+						<img src="../../static/edit.svg" style="height: 30px;width: 30px;margin-top: 10px;"
+							@click="jumpToEdit(item)" />
 					</view>
 					<view class="content-time">
-						开始时间：{{item.startTime}}
+						开始时间：{{item.startDate}}
 					</view>
 				</view>
 			</view>
 		</view>
-		<!-- 		<view class="add-button">
-			<uni-icons type="plus" size="24" color="#61398F"></uni-icons>
-			<text>添加清单</text>
-		</view> -->
-		<!-- 		<uni-collapse>
-			<uni-collapse-item title="待完成">
-				<view v-for="item in preList" :key="item.id" class="list-item">
-					<view class="item-first">
-						<text class="item-title">标题：{{item.name}}</text>
-						<text class="item-type">类型：{{dicts.find(it=>it.type==item.type).value}}</text>
-					</view>
-					<view class="item-second">
-						<text class="item-time">创建时间：{{item.startTime}}</text>
-					</view>
-				</view>
-			</uni-collapse-item>
-			<uni-collapse-item title="进行中">
-				<view v-for="item in ingList" :key="item.id">
-					<view v-for="item in preList" :key="item.id" class="list-item">
-						<view class="item-first">
-							<text class="item-title">标题：{{item.name}}</text>
-							<text class="item-type">类型：{{dicts.find(it=>it.type==item.type).value}}</text>
-						</view>
-						<view class="item-second">
-							<text class="item-time">创建时间：{{item.startTime}}</text>
-						</view>
-					</view>
-				</view>
-			</uni-collapse-item>
-			<uni-collapse-item title="已完成">
-				<view v-for="item in edList" :key="item.id">
-					<view v-for="item in preList" :key="item.id" class="list-item">
-						<view class="item-first">
-							<text class="item-title">标题：{{item.name}}</text>
-							<text class="item-type">类型：{{dicts.find(it=>it.type==item.type).value}}</text>
-						</view>
-						<view class="item-second">
-							<text class="item-time">完成时间：{{item.endTime||'这是一个秘密'}}</text>
-						</view>
-					</view>
-				</view>
-			</uni-collapse-item>
-		</uni-collapse> -->
 	</view>
 </template>
 
@@ -126,6 +85,13 @@
 	onMounted(() => {
 		selectType(listType.value)
 	})
+
+	const jumpToEdit = function(item) {
+		const params = encodeURIComponent(JSON.stringify(item))
+		uni.navigateTo({
+			url: `/pages/list/editItem/editItem?type=edit&params=${params}` // 带参数的 URL
+		});
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -196,7 +162,7 @@
 							white-space: nowrap;
 							overflow: hidden;
 							text-overflow: ellipsis;
-							width: calc(100% - 60px);
+							width: calc(100% - 100px);
 						}
 
 						.title-badge {

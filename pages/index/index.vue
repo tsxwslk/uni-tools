@@ -40,7 +40,7 @@
 									</view>
 								</view>
 								<view class="content-time">
-									开始时间：{{item.startTime}}
+									开始时间：{{item.startDate}}
 								</view>
 							</view>
 						</view>
